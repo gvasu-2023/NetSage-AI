@@ -2,6 +2,7 @@ from pathlib import Path
 
 from rules.case_loader import load_all_cases
 from rules.gateway_rules import diagnose_default_gateway
+from rules.vlan_rules import diagnose_vlan_assignment
 
 
 def run_diagnosis_rules(case_data):
@@ -12,7 +13,8 @@ def run_diagnosis_rules(case_data):
     """
 
     rules = [
-        diagnose_default_gateway
+        diagnose_default_gateway,
+        diagnose_vlan_assignment
     ]
 
     for rule in rules:
@@ -40,7 +42,6 @@ def print_diagnosis(case_data, diagnosis):
 
     print(f"Case ID: {case_data.get('case_id')}")
     print(f"Title: {case_data.get('title')}")
-
     print("-" * 60)
 
     if diagnosis.get("fault_detected"):
@@ -49,9 +50,17 @@ def print_diagnosis(case_data, diagnosis):
         print(f"Category: {diagnosis.get('category')}")
         print(f"Diagnosis: {diagnosis.get('diagnosis')}")
         print(f"Faulty Device: {diagnosis.get('faulty_device')}")
+
+        if diagnosis.get("faulty_interface"):
+            print(
+                f"Faulty Interface: "
+                f"{diagnosis.get('faulty_interface')}"
+            )
+
         print(f"OSI Layer: {diagnosis.get('osi_layer')}")
         print(f"Confidence: {diagnosis.get('confidence')}")
 
+        # Gateway-specific details
         if diagnosis.get("configured_gateway"):
             print(
                 "Configured Gateway: "
@@ -64,6 +73,19 @@ def print_diagnosis(case_data, diagnosis):
                 f"{diagnosis.get('expected_gateway')}"
             )
 
+        # VLAN-specific details
+        if diagnosis.get("actual_vlan") is not None:
+            print(
+                f"Actual VLAN: "
+                f"{diagnosis.get('actual_vlan')}"
+            )
+
+        if diagnosis.get("expected_vlan") is not None:
+            print(
+                f"Expected VLAN: "
+                f"{diagnosis.get('expected_vlan')}"
+            )
+
         print("\nExplanation:")
         print(diagnosis.get("explanation"))
 
@@ -71,6 +93,7 @@ def print_diagnosis(case_data, diagnosis):
         print(diagnosis.get("recommended_fix"))
 
     else:
+
         print("Fault Detected: NO")
         print(f"Diagnosis: {diagnosis.get('diagnosis')}")
         print(f"Confidence: {diagnosis.get('confidence')}")
