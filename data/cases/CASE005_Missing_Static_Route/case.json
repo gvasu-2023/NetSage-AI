@@ -1,0 +1,61 @@
+{
+  "case_id": "CASE005",
+
+  "title": "Missing Static Route",
+
+  "category": "Routing",
+
+  "severity": "High",
+
+  "topology": {
+    "faulty_device": "R1",
+
+    "destination_network": "172.16.10.0/24",
+
+    "next_hop": "10.0.0.2",
+
+    "source_device": "External-PC",
+
+    "destination_device": "PC1"
+  },
+
+  "routing": {
+    "destination_network": "172.16.10.0",
+
+    "subnet_mask": "255.255.255.0",
+
+    "next_hop": "10.0.0.2",
+
+    "route_present": false
+  },
+
+  "expected_state": {
+    "route_present": true,
+
+    "expected_destination_network": "172.16.10.0",
+
+    "expected_subnet_mask": "255.255.255.0",
+
+    "expected_next_hop": "10.0.0.2"
+  },
+
+  "symptoms": {
+    "source_ip": "172.16.10.10",
+
+    "destination_ip": "192.168.10.10",
+
+    "end_to_end_ping": "failed"
+  },
+
+  "expected_diagnosis": {
+    "category": "Routing",
+
+    "diagnosis": "Missing Static Route",
+
+    "faulty_device": "R1",
+
+    "osi_layer": "Layer 3",
+
+    "confidence": "High"
+  }
+}

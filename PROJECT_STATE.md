@@ -54,3 +54,30 @@ SW1 interface Fa0/1, which connects PC1 to the network, will be intentionally ad
 **Faulty Interface:** Fa0/1  
 **OSI Layer:** Layer 1/2  
 **Confidence:** High
+
+### CASE005 - Missing Static Route
+
+Status: Completed and validated
+
+Fault:
+- The static route from R1 to 172.16.10.0/24 through 10.0.0.2 is missing.
+
+Root Cause:
+- The required route was removed from R1.
+
+Diagnosis:
+- Missing Static Route
+
+Faulty Device:
+- R1
+
+OSI Layer:
+- Layer 3
+
+Validation:
+- Packet Tracer fault topology completed.
+- Healthy and fault-state evidence captured.
+- Positive routing rule test passed.
+- Negative routing rule test passed.
+- Diagnosis engine integration passed.
+- Full test suite passed.
