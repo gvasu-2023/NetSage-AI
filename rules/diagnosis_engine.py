@@ -3,6 +3,7 @@ from pathlib import Path
 from rules.case_loader import load_all_cases
 from rules.gateway_rules import diagnose_default_gateway
 from rules.vlan_rules import diagnose_vlan_assignment
+from rules.dhcp_rules import diagnose_dhcp_service_failure
 
 
 def run_diagnosis_rules(case_data):
@@ -14,7 +15,8 @@ def run_diagnosis_rules(case_data):
 
     rules = [
         diagnose_default_gateway,
-        diagnose_vlan_assignment
+        diagnose_vlan_assignment,
+        diagnose_dhcp_service_failure
     ]
 
     for rule in rules:
@@ -86,6 +88,30 @@ def print_diagnosis(case_data, diagnosis):
                 f"{diagnosis.get('expected_vlan')}"
             )
 
+        # DHCP-specific details
+        if "dhcp_service_enabled" in diagnosis:
+            service_status = (
+                "ON"
+                if diagnosis.get("dhcp_service_enabled")
+                else "OFF"
+            )
+
+            print(
+                f"DHCP Service: {service_status}"
+            )
+
+        if diagnosis.get("dhcp_client_ip_address"):
+            print(
+                "DHCP Client IP Address: "
+                f"{diagnosis.get('dhcp_client_ip_address')}"
+            )
+
+        if diagnosis.get("expected_network"):
+            print(
+                "Expected Network: "
+                f"{diagnosis.get('expected_network')}"
+            )
+
         print("\nExplanation:")
         print(diagnosis.get("explanation"))
 
@@ -93,7 +119,6 @@ def print_diagnosis(case_data, diagnosis):
         print(diagnosis.get("recommended_fix"))
 
     else:
-
         print("Fault Detected: NO")
         print(f"Diagnosis: {diagnosis.get('diagnosis')}")
         print(f"Confidence: {diagnosis.get('confidence')}")
@@ -123,9 +148,7 @@ def main():
 
     for case in cases:
         case_data = case["data"]
-
         diagnosis = run_diagnosis_rules(case_data)
-
         print_diagnosis(case_data, diagnosis)
 
 

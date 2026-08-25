@@ -1,0 +1,28 @@
+{
+  "case_id": "CASE003",
+  "title": "DHCP Service Failure",
+  "category": "DHCP",
+  "faulty_device": "Server0",
+  "osi_layer": "Layer 7",
+  "symptoms": {
+    "dhcp_client_ip_address": "169.254.156.102",
+    "dhcp_client_subnet_mask": "255.255.0.0",
+    "dhcp_client_default_gateway": "0.0.0.0",
+    "server_ip_address": "192.168.30.10",
+    "dhcp_client_vlan": 30,
+    "expected_network": "192.168.30.0/24"
+  },
+  "dhcp": {
+    "server": "Server0",
+    "service_enabled": false,
+    "pool_name": "serverPool",
+    "pool_default_gateway": "192.168.30.1",
+    "pool_start_ip": "192.168.30.100",
+    "pool_subnet_mask": "255.255.255.0"
+  },
+  "expected": {
+    "fault_detected": true,
+    "diagnosis": "DHCP Service Failure",
+    "confidence": "High"
+  }
+}
