@@ -1,0 +1,33 @@
+{
+  "case_id": "CASE004",
+  "title": "Interface Administratively Down",
+  "category": "Interface",
+  "severity": "High",
+  "topology": {
+    "faulty_device": "SW1",
+    "faulty_interface": "Fa0/1",
+    "connected_device": "PC1"
+  },
+  "interface": {
+    "name": "Fa0/1",
+    "admin_status": "down",
+    "oper_status": "down",
+    "status_reason": "administratively down"
+  },
+  "expected_state": {
+    "admin_status": "up",
+    "oper_status": "up"
+  },
+  "symptoms": {
+    "ping_to_default_gateway": "failed",
+    "default_gateway": "192.168.10.1"
+  },
+  "expected_diagnosis": {
+    "category": "Interface",
+    "diagnosis": "Interface Administratively Down",
+    "faulty_device": "SW1",
+    "faulty_interface": "Fa0/1",
+    "osi_layer": "Layer 1/2",
+    "confidence": "High"
+  }
+}
