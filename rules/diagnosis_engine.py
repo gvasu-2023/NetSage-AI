@@ -28,7 +28,6 @@ def run_diagnosis_rules(case_data):
         diagnose_interface_administratively_down,
         diagnose_missing_static_route,
         diagnose_wrong_subnet_mask,
-        diagnose_vlan_missing_from_trunk,
         diagnose_wrong_dns_server,
         diagnose_acl_blocks_traffic,
         diagnose_port_security_violation
