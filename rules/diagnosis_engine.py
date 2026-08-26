@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from rules.case_loader import load_all_cases
-
 from rules.gateway_rules import diagnose_default_gateway
 from rules.vlan_rules import diagnose_vlan_assignment
 from rules.dhcp_rules import diagnose_dhcp_service_failure
@@ -10,6 +9,8 @@ from rules.routing_rules import diagnose_missing_static_route
 from rules.subnet_rules import diagnose_wrong_subnet_mask
 from rules.trunk_rules import diagnose_vlan_missing_from_trunk
 from rules.dns_rules import diagnose_wrong_dns_server
+from rules.acl_rules import diagnose_acl_blocks_traffic
+
 
 def run_diagnosis_rules(case_data):
     """
@@ -25,8 +26,9 @@ def run_diagnosis_rules(case_data):
         diagnose_dhcp_service_failure,
         diagnose_interface_administratively_down,
         diagnose_missing_static_route,
-         diagnose_wrong_subnet_mask,
-         diagnose_wrong_dns_server
+        diagnose_wrong_subnet_mask,
+        diagnose_wrong_dns_server,
+        diagnose_acl_blocks_traffic
     ]
 
     for rule in rules:
@@ -54,6 +56,7 @@ def print_diagnosis(case_data, diagnosis):
 
     print(f"Case ID: {case_data.get('case_id')}")
     print(f"Title: {case_data.get('title')}")
+
     print("-" * 60)
 
     if diagnosis.get("fault_detected"):
@@ -65,7 +68,7 @@ def print_diagnosis(case_data, diagnosis):
 
         if diagnosis.get("faulty_interface"):
             print(
-                f"Faulty Interface: "
+                "Faulty Interface: "
                 f"{diagnosis.get('faulty_interface')}"
             )
 
@@ -73,6 +76,7 @@ def print_diagnosis(case_data, diagnosis):
         print(f"Confidence: {diagnosis.get('confidence')}")
 
         # Gateway-specific details
+
         if diagnosis.get("configured_gateway"):
             print(
                 "Configured Gateway: "
@@ -86,18 +90,21 @@ def print_diagnosis(case_data, diagnosis):
             )
 
         # VLAN-specific details
+
         if diagnosis.get("actual_vlan") is not None:
             print(
-                f"Actual VLAN: "
+                "Actual VLAN: "
                 f"{diagnosis.get('actual_vlan')}"
             )
 
         if diagnosis.get("expected_vlan") is not None:
             print(
-                f"Expected VLAN: "
+                "Expected VLAN: "
                 f"{diagnosis.get('expected_vlan')}"
             )
-         # Interface-specific details
+
+        # Interface-specific details
+
         if diagnosis.get("interface_status"):
             print(
                 "Interface Status: "
@@ -109,8 +116,11 @@ def print_diagnosis(case_data, diagnosis):
                 "Expected Status: "
                 f"{diagnosis.get('expected_status')}"
             )
+
         # DHCP-specific details
+
         if "dhcp_service_enabled" in diagnosis:
+
             service_status = (
                 "ON"
                 if diagnosis.get("dhcp_service_enabled")
@@ -132,7 +142,9 @@ def print_diagnosis(case_data, diagnosis):
                 "Expected Network: "
                 f"{diagnosis.get('expected_network')}"
             )
+
         # Static route-specific details
+
         if diagnosis.get("destination_network"):
             print(
                 "Destination Network: "
@@ -150,6 +162,7 @@ def print_diagnosis(case_data, diagnosis):
                 "Expected Next Hop: "
                 f"{diagnosis.get('next_hop')}"
             )
+
         # Subnet mask-specific details
 
         if diagnosis.get("configured_subnet_mask"):
@@ -163,10 +176,12 @@ def print_diagnosis(case_data, diagnosis):
                 "Expected Subnet Mask: "
                 f"{diagnosis.get('expected_subnet_mask')}"
             )
+
         # Trunk-specific details
+
         if diagnosis.get("missing_vlan") is not None:
             print(
-                f"Missing VLAN: "
+                "Missing VLAN: "
                 f"{diagnosis.get('missing_vlan')}"
             )
 
@@ -175,7 +190,9 @@ def print_diagnosis(case_data, diagnosis):
                 "Allowed VLANs: "
                 f"{diagnosis.get('actual_allowed_vlans')}"
             )
-                # DNS-specific details
+
+        # DNS-specific details
+
         if diagnosis.get("configured_dns_server"):
             print(
                 "Configured DNS Server: "
@@ -199,6 +216,33 @@ def print_diagnosis(case_data, diagnosis):
                 "Expected IP Address: "
                 f"{diagnosis.get('expected_ip_address')}"
             )
+
+        # ACL-specific details
+
+        if diagnosis.get("acl_number") is not None:
+            print(
+                "ACL Number: "
+                f"{diagnosis.get('acl_number')}"
+            )
+
+        if diagnosis.get("acl_direction"):
+            print(
+                "ACL Direction: "
+                f"{diagnosis.get('acl_direction')}"
+            )
+
+        if diagnosis.get("blocked_source"):
+            print(
+                "Blocked Source: "
+                f"{diagnosis.get('blocked_source')}"
+            )
+
+        if diagnosis.get("blocked_destination"):
+            print(
+                "Blocked Destination: "
+                f"{diagnosis.get('blocked_destination')}"
+            )
+
         print("\nExplanation:")
         print(diagnosis.get("explanation"))
 
@@ -206,6 +250,7 @@ def print_diagnosis(case_data, diagnosis):
         print(diagnosis.get("recommended_fix"))
 
     else:
+
         print("Fault Detected: NO")
         print(f"Diagnosis: {diagnosis.get('diagnosis')}")
         print(f"Confidence: {diagnosis.get('confidence')}")
@@ -234,9 +279,15 @@ def main():
     print(f"\nLoaded {len(cases)} case(s).")
 
     for case in cases:
+
         case_data = case["data"]
+
         diagnosis = run_diagnosis_rules(case_data)
-        print_diagnosis(case_data, diagnosis)
+
+        print_diagnosis(
+            case_data,
+            diagnosis
+        )
 
 
 if __name__ == "__main__":

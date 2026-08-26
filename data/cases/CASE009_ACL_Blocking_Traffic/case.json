@@ -1,0 +1,36 @@
+{
+  "case_id": "CASE009",
+  "title": "ACL Blocking Traffic",
+  "category": "ACL",
+  "severity": "High",
+
+  "topology": {
+    "faulty_device": "R1",
+    "source_device": "PC1",
+    "destination_device": "External-PC",
+    "outgoing_interface": "GigabitEthernet0/1"
+  },
+
+  "acl_configuration": {
+    "acl_number": "101",
+    "acl_direction": "out",
+    "blocked_source": "192.168.10.10",
+    "blocked_destination": "172.16.10.10",
+    "deny_rule_present": true,
+    "permit_other_traffic": true
+  },
+
+  "symptoms": {
+    "source_to_destination_ping": "failed",
+    "acl_match": true
+  },
+
+  "expected_diagnosis": {
+    "category": "ACL",
+    "diagnosis": "ACL Blocking Traffic",
+    "faulty_device": "R1",
+    "faulty_interface": "GigabitEthernet0/1",
+    "osi_layer": "Layer 3/4",
+    "confidence": "High"
+  }
+}
