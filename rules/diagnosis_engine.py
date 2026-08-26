@@ -8,6 +8,7 @@ from rules.dhcp_rules import diagnose_dhcp_service_failure
 from rules.interface_rules import diagnose_interface_administratively_down
 from rules.routing_rules import diagnose_missing_static_route
 from rules.subnet_rules import diagnose_wrong_subnet_mask
+from rules.trunk_rules import diagnose_vlan_missing_from_trunk
 
 def run_diagnosis_rules(case_data):
     """
@@ -19,6 +20,7 @@ def run_diagnosis_rules(case_data):
     rules = [
         diagnose_default_gateway,
         diagnose_vlan_assignment,
+        diagnose_vlan_missing_from_trunk,
         diagnose_dhcp_service_failure,
         diagnose_interface_administratively_down,
         diagnose_missing_static_route,
@@ -158,6 +160,18 @@ def print_diagnosis(case_data, diagnosis):
             print(
                 "Expected Subnet Mask: "
                 f"{diagnosis.get('expected_subnet_mask')}"
+            )
+        # Trunk-specific details
+        if diagnosis.get("missing_vlan") is not None:
+            print(
+                f"Missing VLAN: "
+                f"{diagnosis.get('missing_vlan')}"
+            )
+
+        if diagnosis.get("actual_allowed_vlans") is not None:
+            print(
+                "Allowed VLANs: "
+                f"{diagnosis.get('actual_allowed_vlans')}"
             )
         print("\nExplanation:")
         print(diagnosis.get("explanation"))

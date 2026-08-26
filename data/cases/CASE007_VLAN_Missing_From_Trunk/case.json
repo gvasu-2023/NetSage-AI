@@ -1,0 +1,40 @@
+{
+  "case_id": "CASE007",
+  "title": "VLAN Missing From Trunk",
+  "category": "VLAN",
+  "severity": "High",
+
+  "topology": {
+    "faulty_device": "SW1",
+    "faulty_interface": "Gig0/1",
+    "connected_device": "R1"
+  },
+
+  "trunk": {
+    "interface": "Gig0/1",
+    "actual_allowed_vlans": [1, 10, 30],
+    "missing_vlan": 20,
+    "actual_status": "trunking"
+  },
+
+  "expected_state": {
+    "required_vlan": 20,
+    "interface_mode": "trunk",
+    "expected_status": "VLAN 20 allowed on trunk"
+  },
+
+  "symptoms": {
+    "vlan20_gateway": "192.168.20.1",
+    "vlan20_gateway_ping": "failed",
+    "other_vlan_gateway_ping": "successful"
+  },
+
+  "expected_diagnosis": {
+    "category": "VLAN",
+    "diagnosis": "VLAN Missing From Trunk",
+    "faulty_device": "SW1",
+    "faulty_interface": "Gig0/1",
+    "osi_layer": "Layer 2",
+    "confidence": "High"
+  }
+}
