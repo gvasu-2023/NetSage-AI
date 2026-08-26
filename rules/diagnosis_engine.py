@@ -10,6 +10,7 @@ from rules.subnet_rules import diagnose_wrong_subnet_mask
 from rules.trunk_rules import diagnose_vlan_missing_from_trunk
 from rules.dns_rules import diagnose_wrong_dns_server
 from rules.acl_rules import diagnose_acl_blocks_traffic
+from rules.port_security_rules import diagnose_port_security_violation
 
 
 def run_diagnosis_rules(case_data):
@@ -27,8 +28,10 @@ def run_diagnosis_rules(case_data):
         diagnose_interface_administratively_down,
         diagnose_missing_static_route,
         diagnose_wrong_subnet_mask,
+        diagnose_vlan_missing_from_trunk,
         diagnose_wrong_dns_server,
-        diagnose_acl_blocks_traffic
+        diagnose_acl_blocks_traffic,
+        diagnose_port_security_violation
     ]
 
     for rule in rules:
@@ -241,6 +244,32 @@ def print_diagnosis(case_data, diagnosis):
             print(
                 "Blocked Destination: "
                 f"{diagnosis.get('blocked_destination')}"
+            )
+
+        # Port security-specific details
+
+        if diagnosis.get("port_status"):
+            print(
+                "Port Security Status: "
+                f"{diagnosis.get('port_status')}"
+            )
+
+        if diagnosis.get("violation_mode"):
+            print(
+                "Violation Mode: "
+                f"{diagnosis.get('violation_mode')}"
+            )
+
+        if diagnosis.get("maximum_mac_addresses") is not None:
+            print(
+                "Maximum MAC Addresses: "
+                f"{diagnosis.get('maximum_mac_addresses')}"
+            )
+
+        if diagnosis.get("security_violation_count") is not None:
+            print(
+                "Security Violation Count: "
+                f"{diagnosis.get('security_violation_count')}"
             )
 
         print("\nExplanation:")

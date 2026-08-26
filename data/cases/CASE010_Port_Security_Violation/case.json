@@ -1,0 +1,22 @@
+{
+  "case_id": "CASE010",
+  "title": "Port Security Violation",
+  "category": "Port Security",
+
+  "topology": {
+    "faulty_device": "SW1",
+    "faulty_interface": "Fa0/1",
+    "affected_host": "PC1"
+  },
+
+  "port_security": {
+    "enabled": true,
+    "port_status": "Secure-shutdown",
+    "violation_mode": "Shutdown",
+    "maximum_mac_addresses": 1,
+    "total_mac_addresses": 1,
+    "sticky_mac_addresses": 1,
+    "security_violation_count": 1,
+    "interface_status": "err-disabled"
+  }
+}

@@ -1,8 +1,8 @@
 def diagnose_acl_blocks_traffic(case_data):
     """
     Diagnose a connectivity failure caused by an ACL
-    explicitly denying traffic between the source and
-    destination hosts.
+    explicitly blocking traffic between a source and
+    destination host.
     """
 
     if case_data.get("category") != "ACL":
@@ -11,51 +11,81 @@ def diagnose_acl_blocks_traffic(case_data):
         }
 
     topology = case_data.get("topology", {})
-    acl_data = case_data.get("acl", {})
+    acl_data = case_data.get("acl_configuration", {})
+    expected_data = case_data.get("expected_diagnosis", {})
 
-    action = acl_data.get("action")
+    deny_rule_present = acl_data.get(
+        "deny_rule_present",
+        False
+    )
 
-    if action == "deny":
-        faulty_device = topology.get("faulty_device")
-        faulty_interface = topology.get("faulty_interface")
+    acl_match = case_data.get(
+        "symptoms",
+        {}
+    ).get(
+        "acl_match",
+        False
+    )
 
-        source_ip = acl_data.get(
-            "source",
-            topology.get("source_ip")
-        )
-
-        destination_ip = acl_data.get(
-            "destination",
-            topology.get("destination_ip")
-        )
-
-        acl_number = acl_data.get("acl_number")
-        direction = acl_data.get("direction")
-
+    if not deny_rule_present and not acl_match:
         return {
-            "fault_detected": True,
-            "category": "ACL",
-            "diagnosis": "ACL Blocks Traffic",
-            "faulty_device": faulty_device,
-            "faulty_interface": faulty_interface,
-            "osi_layer": "Layer 3",
-            "confidence": "High",
-            "acl_number": acl_number,
-            "acl_direction": direction,
-            "blocked_source": source_ip,
-            "blocked_destination": destination_ip,
-            "configured_action": action,
-            "explanation": (
-                f"ACL {acl_number} on {faulty_device} contains a deny rule "
-                f"that blocks traffic from {source_ip} to {destination_ip}."
-            ),
-            "recommended_fix": (
-                f"Remove or modify the deny rule in ACL {acl_number} on "
-                f"{faulty_device} so that traffic from {source_ip} to "
-                f"{destination_ip} is permitted."
-            )
+            "fault_detected": False
         }
 
+    faulty_device = topology.get(
+        "faulty_device"
+    )
+
+    faulty_interface = topology.get(
+        "outgoing_interface"
+    )
+
+    acl_number = acl_data.get(
+        "acl_number"
+    )
+
+    acl_direction = acl_data.get(
+        "acl_direction"
+    )
+
+    blocked_source = acl_data.get(
+        "blocked_source"
+    )
+
+    blocked_destination = acl_data.get(
+        "blocked_destination"
+    )
+
     return {
-        "fault_detected": False
+        "fault_detected": True,
+        "category": "ACL",
+        "diagnosis": "ACL Blocking Traffic",
+        "faulty_device": faulty_device,
+        "faulty_interface": faulty_interface,
+        "osi_layer": expected_data.get(
+            "osi_layer",
+            "Layer 3"
+        ),
+        "confidence": expected_data.get(
+            "confidence",
+            "High"
+        ),
+        "acl_number": acl_number,
+        "acl_direction": acl_direction,
+        "blocked_source": blocked_source,
+        "blocked_destination": blocked_destination,
+        "deny_rule_present": deny_rule_present,
+        "explanation": (
+            f"ACL {acl_number} on {faulty_device} is applied "
+            f"in the {acl_direction} direction on interface "
+            f"{faulty_interface} and contains a deny rule that "
+            f"blocks traffic from {blocked_source} to "
+            f"{blocked_destination}."
+        ),
+        "recommended_fix": (
+            f"Remove or modify the deny rule in ACL {acl_number} "
+            f"on {faulty_device} so that traffic from "
+            f"{blocked_source} to {blocked_destination} is "
+            f"permitted."
+        )
     }
