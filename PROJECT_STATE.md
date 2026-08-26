@@ -53,3 +53,31 @@ PC1 will have an incorrect subnet mask configured.
 **Faulty Device:** PC1  
 **OSI Layer:** Layer 3  
 **Confidence:** High
+
+## CASE008 - Wrong DNS Server
+
+Status: Completed
+
+Fault Type: DNS Configuration
+
+Root Cause:
+PC1 was configured with the incorrect DNS server address
+192.168.10.254 instead of the correct DNS server 192.168.30.10.
+
+Evidence:
+- Wrong DNS configuration on PC1
+- Correct DNS service configuration on Server0
+- Successful hostname resolution with correct DNS
+- Failed hostname resolution with incorrect DNS
+
+Diagnosis Rule:
+rules/dns_rules.py
+
+Tests:
+- tests/test_dns_rules.py
+- tests/test_dns_rules_negative.py
+
+Verification:
+- DNS rule tests passed
+- Full pytest suite passed
+- Diagnosis engine correctly detected CASE008

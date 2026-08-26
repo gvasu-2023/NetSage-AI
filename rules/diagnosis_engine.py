@@ -9,6 +9,7 @@ from rules.interface_rules import diagnose_interface_administratively_down
 from rules.routing_rules import diagnose_missing_static_route
 from rules.subnet_rules import diagnose_wrong_subnet_mask
 from rules.trunk_rules import diagnose_vlan_missing_from_trunk
+from rules.dns_rules import diagnose_wrong_dns_server
 
 def run_diagnosis_rules(case_data):
     """
@@ -24,7 +25,8 @@ def run_diagnosis_rules(case_data):
         diagnose_dhcp_service_failure,
         diagnose_interface_administratively_down,
         diagnose_missing_static_route,
-         diagnose_wrong_subnet_mask
+         diagnose_wrong_subnet_mask,
+         diagnose_wrong_dns_server
     ]
 
     for rule in rules:
@@ -172,6 +174,30 @@ def print_diagnosis(case_data, diagnosis):
             print(
                 "Allowed VLANs: "
                 f"{diagnosis.get('actual_allowed_vlans')}"
+            )
+                # DNS-specific details
+        if diagnosis.get("configured_dns_server"):
+            print(
+                "Configured DNS Server: "
+                f"{diagnosis.get('configured_dns_server')}"
+            )
+
+        if diagnosis.get("correct_dns_server"):
+            print(
+                "Correct DNS Server: "
+                f"{diagnosis.get('correct_dns_server')}"
+            )
+
+        if diagnosis.get("hostname"):
+            print(
+                "Hostname: "
+                f"{diagnosis.get('hostname')}"
+            )
+
+        if diagnosis.get("expected_ip_address"):
+            print(
+                "Expected IP Address: "
+                f"{diagnosis.get('expected_ip_address')}"
             )
         print("\nExplanation:")
         print(diagnosis.get("explanation"))
