@@ -1,0 +1,35 @@
+{
+  "case_id": "CASE006",
+  "title": "Wrong Subnet Mask",
+  "category": "IP Configuration",
+  "severity": "High",
+  "topology": {
+    "faulty_device": "PC1",
+    "connected_switch": "SW1",
+    "connected_interface": "Fa0/1",
+    "gateway_device": "R1"
+  },
+  "ip_configuration": {
+    "device": "PC1",
+    "ip_address": "192.168.10.10",
+    "configured_subnet_mask": "255.255.255.248",
+    "default_gateway": "192.168.10.1"
+  },
+  "expected_configuration": {
+    "network": "192.168.10.0/24",
+    "subnet_mask": "255.255.255.0",
+    "default_gateway": "192.168.10.1"
+  },
+  "symptoms": {
+    "gateway_ping": "successful",
+    "remote_ping": "successful",
+    "configuration_mismatch": "PC1 subnet mask differs from the expected VLAN 10 network mask"
+  },
+  "expected_diagnosis": {
+    "category": "IP Configuration",
+    "diagnosis": "Wrong Subnet Mask",
+    "faulty_device": "PC1",
+    "osi_layer": "Layer 3",
+    "confidence": "High"
+  }
+}

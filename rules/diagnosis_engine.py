@@ -7,6 +7,8 @@ from rules.vlan_rules import diagnose_vlan_assignment
 from rules.dhcp_rules import diagnose_dhcp_service_failure
 from rules.interface_rules import diagnose_interface_administratively_down
 from rules.routing_rules import diagnose_missing_static_route
+from rules.subnet_rules import diagnose_wrong_subnet_mask
+
 def run_diagnosis_rules(case_data):
     """
     Run all available diagnostic rules.
@@ -19,7 +21,8 @@ def run_diagnosis_rules(case_data):
         diagnose_vlan_assignment,
         diagnose_dhcp_service_failure,
         diagnose_interface_administratively_down,
-        diagnose_missing_static_route
+        diagnose_missing_static_route,
+         diagnose_wrong_subnet_mask
     ]
 
     for rule in rules:
@@ -125,7 +128,7 @@ def print_diagnosis(case_data, diagnosis):
                 "Expected Network: "
                 f"{diagnosis.get('expected_network')}"
             )
-                # Static route-specific details
+        # Static route-specific details
         if diagnosis.get("destination_network"):
             print(
                 "Destination Network: "
@@ -142,6 +145,19 @@ def print_diagnosis(case_data, diagnosis):
             print(
                 "Expected Next Hop: "
                 f"{diagnosis.get('next_hop')}"
+            )
+        # Subnet mask-specific details
+
+        if diagnosis.get("configured_subnet_mask"):
+            print(
+                "Configured Subnet Mask: "
+                f"{diagnosis.get('configured_subnet_mask')}"
+            )
+
+        if diagnosis.get("expected_subnet_mask"):
+            print(
+                "Expected Subnet Mask: "
+                f"{diagnosis.get('expected_subnet_mask')}"
             )
         print("\nExplanation:")
         print(diagnosis.get("explanation"))
