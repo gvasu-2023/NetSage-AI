@@ -9,6 +9,7 @@ from rules.routing_rules import diagnose_missing_static_route
 from rules.subnet_rules import diagnose_wrong_subnet_mask
 from rules.trunk_rules import diagnose_vlan_missing_from_trunk
 from rules.dns_rules import diagnose_wrong_dns_server
+from rules.dns_service_rules import diagnose_dns_service_failure
 from rules.acl_rules import diagnose_acl_blocks_traffic
 from rules.port_security_rules import diagnose_port_security_violation
 from rules.dhcp_relay_rules import diagnose_dhcp_relay_missing
@@ -39,7 +40,8 @@ def run_diagnosis_rules(case_data):
         diagnose_acl_blocks_traffic,
         diagnose_port_security_violation,
         diagnose_native_vlan_mismatch,
-         diagnose_duplicate_ip_address
+         diagnose_duplicate_ip_address,
+         diagnose_dns_service_failure,
     ]
 
     for rule in rules:
