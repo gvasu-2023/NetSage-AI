@@ -1,0 +1,38 @@
+{
+  "case_id": "CASE013",
+  "title": "Duplicate IP Address",
+  "category": "IP Configuration",
+  "severity": "High",
+
+  "topology": {
+    "faulty_device": "PC3",
+    "conflicting_device": "PC1",
+    "affected_network": "192.168.10.0/24",
+    "default_gateway": "192.168.10.1"
+  },
+
+  "ip_configuration": {
+    "duplicate_ip_detected": true,
+    "duplicate_ip_address": "192.168.10.10",
+    "expected_pc3_ip": "192.168.10.30",
+    "pc1_ip_address": "192.168.10.10",
+    "pc3_ip_address": "192.168.10.10"
+  },
+
+  "symptoms": {
+    "affected_device": "PC3",
+    "ip_configuration_status": "invalid",
+    "gateway_ping": "failed",
+    "remote_ping": "failed",
+    "ip_conflict_detected": true
+  },
+
+  "expected_diagnosis": {
+    "category": "IP Configuration",
+    "diagnosis": "Duplicate IP Address",
+    "faulty_device": "PC3",
+    "conflicting_device": "PC1",
+    "osi_layer": "Layer 3",
+    "confidence": "High"
+  }
+}

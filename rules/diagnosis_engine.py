@@ -13,6 +13,7 @@ from rules.acl_rules import diagnose_acl_blocks_traffic
 from rules.port_security_rules import diagnose_port_security_violation
 from rules.dhcp_relay_rules import diagnose_dhcp_relay_missing
 from rules.native_vlan_rules import diagnose_native_vlan_mismatch
+from rules.duplicate_ip_rules import diagnose_duplicate_ip_address
 
 def run_diagnosis_rules(case_data):
     """
@@ -33,7 +34,8 @@ def run_diagnosis_rules(case_data):
         diagnose_wrong_dns_server,
         diagnose_acl_blocks_traffic,
         diagnose_port_security_violation,
-        diagnose_native_vlan_mismatch
+        diagnose_native_vlan_mismatch,
+         diagnose_duplicate_ip_address
     ]
 
     for rule in rules:
@@ -349,6 +351,31 @@ def print_diagnosis(case_data, diagnosis):
             print(
                 "Affected VLAN: "
                 f"{diagnosis.get('affected_vlan')}"
+            )
+                # Duplicate IP-specific details
+
+        if diagnosis.get("conflicting_device"):
+            print(
+                "Conflicting Device: "
+                f"{diagnosis.get('conflicting_device')}"
+            )
+
+        if diagnosis.get("duplicate_ip_address"):
+            print(
+                "Duplicate IP Address: "
+                f"{diagnosis.get('duplicate_ip_address')}"
+            )
+
+        if diagnosis.get("affected_network"):
+            print(
+                "Affected Network: "
+                f"{diagnosis.get('affected_network')}"
+            )
+
+        if diagnosis.get("default_gateway"):
+            print(
+                "Default Gateway: "
+                f"{diagnosis.get('default_gateway')}"
             )
         print("\nExplanation:")
         print(diagnosis.get("explanation"))
