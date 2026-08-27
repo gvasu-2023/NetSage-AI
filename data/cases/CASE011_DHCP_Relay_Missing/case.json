@@ -1,0 +1,37 @@
+{
+  "case_id": "CASE011",
+  "title": "DHCP Relay Missing",
+  "category": "DHCP Relay",
+  "severity": "High",
+
+  "topology": {
+    "faulty_device": "R1",
+    "faulty_interface": "GigabitEthernet0/0.20",
+    "client_device": "PC2",
+    "client_network": "192.168.20.0/24",
+    "dhcp_server": "Server0",
+    "dhcp_server_ip": "192.168.30.10"
+  },
+
+  "dhcp_relay": {
+    "helper_address_configured": false,
+    "expected_helper_address": "192.168.30.10"
+  },
+
+  "symptoms": {
+    "dhcp_request": "failed",
+    "client_ip_address": "169.254.9.220",
+    "default_gateway": "0.0.0.0",
+    "dns_server": "0.0.0.0",
+    "apipa_assigned": true
+  },
+
+  "expected_diagnosis": {
+    "category": "DHCP Relay",
+    "diagnosis": "DHCP Relay Missing",
+    "faulty_device": "R1",
+    "faulty_interface": "GigabitEthernet0/0.20",
+    "osi_layer": "Layer 3",
+    "confidence": "High"
+  }
+}

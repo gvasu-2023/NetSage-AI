@@ -11,7 +11,7 @@ from rules.trunk_rules import diagnose_vlan_missing_from_trunk
 from rules.dns_rules import diagnose_wrong_dns_server
 from rules.acl_rules import diagnose_acl_blocks_traffic
 from rules.port_security_rules import diagnose_port_security_violation
-
+from rules.dhcp_relay_rules import diagnose_dhcp_relay_missing
 
 def run_diagnosis_rules(case_data):
     """
@@ -25,6 +25,7 @@ def run_diagnosis_rules(case_data):
         diagnose_vlan_assignment,
         diagnose_vlan_missing_from_trunk,
         diagnose_dhcp_service_failure,
+        diagnose_dhcp_relay_missing,
         diagnose_interface_administratively_down,
         diagnose_missing_static_route,
         diagnose_wrong_subnet_mask,
@@ -270,7 +271,64 @@ def print_diagnosis(case_data, diagnosis):
                 "Security Violation Count: "
                 f"{diagnosis.get('security_violation_count')}"
             )
+                # DHCP relay-specific details
 
+        if diagnosis.get("client_device"):
+            print(
+                "DHCP Client: "
+                f"{diagnosis.get('client_device')}"
+            )
+
+        if diagnosis.get("dhcp_server"):
+            print(
+                "DHCP Server: "
+                f"{diagnosis.get('dhcp_server')}"
+            )
+
+        if diagnosis.get("dhcp_server_ip"):
+            print(
+                "DHCP Server IP: "
+                f"{diagnosis.get('dhcp_server_ip')}"
+            )
+
+        if "helper_address_configured" in diagnosis:
+
+            helper_status = (
+                "YES"
+                if diagnosis.get(
+                    "helper_address_configured"
+                )
+                else "NO"
+            )
+
+            print(
+                "Helper Address Configured: "
+                f"{helper_status}"
+            )
+
+        if diagnosis.get("expected_helper_address"):
+            print(
+                "Expected Helper Address: "
+                f"{diagnosis.get('expected_helper_address')}"
+            )
+
+        if diagnosis.get("client_ip_address"):
+            print(
+                "Client IP Address: "
+                f"{diagnosis.get('client_ip_address')}"
+            )
+
+        if "apipa_assigned" in diagnosis:
+
+            apipa_status = (
+                "YES"
+                if diagnosis.get("apipa_assigned")
+                else "NO"
+            )
+
+            print(
+                f"APIPA Assigned: {apipa_status}"
+            )
         print("\nExplanation:")
         print(diagnosis.get("explanation"))
 
