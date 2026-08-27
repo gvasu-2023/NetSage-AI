@@ -1,0 +1,36 @@
+{
+  "case_id": "CASE014",
+  "title": "Wrong Static Route Next Hop",
+  "category": "Routing",
+  "severity": "High",
+
+  "topology": {
+    "faulty_device": "R1",
+    "faulty_interface": "GigabitEthernet0/1",
+    "destination_device": "External-PC",
+    "destination_ip": "172.16.10.10",
+    "destination_network": "172.16.10.0/24"
+  },
+
+  "routing": {
+    "route_configured": true,
+    "configured_next_hop": "10.0.0.6",
+    "expected_next_hop": "10.0.0.2",
+    "next_hop_reachable": false,
+    "route_installed": false
+  },
+
+  "symptoms": {
+    "destination_ping": "failed",
+    "local_gateway_ping": "successful"
+  },
+
+  "expected_diagnosis": {
+    "category": "Routing",
+    "diagnosis": "Wrong Static Route Next Hop",
+    "faulty_device": "R1",
+    "faulty_interface": "GigabitEthernet0/1",
+    "osi_layer": "Layer 3",
+    "confidence": "High"
+  }
+}

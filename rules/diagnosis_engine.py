@@ -14,6 +14,9 @@ from rules.port_security_rules import diagnose_port_security_violation
 from rules.dhcp_relay_rules import diagnose_dhcp_relay_missing
 from rules.native_vlan_rules import diagnose_native_vlan_mismatch
 from rules.duplicate_ip_rules import diagnose_duplicate_ip_address
+from rules.wrong_static_route_rules import (
+    diagnose_wrong_static_route_next_hop
+)
 
 def run_diagnosis_rules(case_data):
     """
@@ -30,6 +33,7 @@ def run_diagnosis_rules(case_data):
         diagnose_dhcp_relay_missing,
         diagnose_interface_administratively_down,
         diagnose_missing_static_route,
+        diagnose_wrong_static_route_next_hop,
         diagnose_wrong_subnet_mask,
         diagnose_wrong_dns_server,
         diagnose_acl_blocks_traffic,
