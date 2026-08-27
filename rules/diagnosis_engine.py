@@ -12,6 +12,7 @@ from rules.dns_rules import diagnose_wrong_dns_server
 from rules.acl_rules import diagnose_acl_blocks_traffic
 from rules.port_security_rules import diagnose_port_security_violation
 from rules.dhcp_relay_rules import diagnose_dhcp_relay_missing
+from rules.native_vlan_rules import diagnose_native_vlan_mismatch
 
 def run_diagnosis_rules(case_data):
     """
@@ -31,7 +32,8 @@ def run_diagnosis_rules(case_data):
         diagnose_wrong_subnet_mask,
         diagnose_wrong_dns_server,
         diagnose_acl_blocks_traffic,
-        diagnose_port_security_violation
+        diagnose_port_security_violation,
+        diagnose_native_vlan_mismatch
     ]
 
     for rule in rules:
@@ -328,6 +330,25 @@ def print_diagnosis(case_data, diagnosis):
 
             print(
                 f"APIPA Assigned: {apipa_status}"
+            )
+                # Native VLAN-specific details
+
+        if diagnosis.get("local_native_vlan") is not None:
+            print(
+                "Local Native VLAN: "
+                f"{diagnosis.get('local_native_vlan')}"
+            )
+
+        if diagnosis.get("remote_native_vlan") is not None:
+            print(
+                "Remote Native VLAN: "
+                f"{diagnosis.get('remote_native_vlan')}"
+            )
+
+        if diagnosis.get("affected_vlan") is not None:
+            print(
+                "Affected VLAN: "
+                f"{diagnosis.get('affected_vlan')}"
             )
         print("\nExplanation:")
         print(diagnosis.get("explanation"))

@@ -1,0 +1,35 @@
+{
+  "case_id": "CASE012",
+  "title": "Native VLAN Mismatch",
+  "category": "VLAN",
+  "severity": "High",
+
+  "topology": {
+    "faulty_device": "SW1",
+    "faulty_interface": "GigabitEthernet0/1",
+    "connected_device": "R1",
+    "connected_interface": "GigabitEthernet0/0",
+    "affected_vlan": 10
+  },
+
+  "native_vlan": {
+    "local_native_vlan": 10,
+    "remote_native_vlan": 1,
+    "mismatch_detected": true
+  },
+
+  "symptoms": {
+    "affected_vlan_gateway_ping": "failed",
+    "affected_vlan_remote_ping": "failed",
+    "other_vlans_connectivity": "working"
+  },
+
+  "expected_diagnosis": {
+    "category": "VLAN",
+    "diagnosis": "Native VLAN Mismatch",
+    "faulty_device": "SW1",
+    "faulty_interface": "GigabitEthernet0/1",
+    "osi_layer": "Layer 2",
+    "confidence": "High"
+  }
+}
